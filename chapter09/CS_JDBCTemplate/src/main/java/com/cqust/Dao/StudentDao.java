@@ -21,7 +21,7 @@ public class StudentDao {
 
     public int insert(Student s){
         System.out.println("insert:"+s);
-        String strSql="insert into student(sno,name,age,major)VALUE('%s','%s',%d,'%s')";
+        String  strSql="select *from student ORDER BY sid DESC LIMIT 1;";
         strSql=String.format(strSql,
                 s.getSno(),
                 s.getName(),
@@ -29,7 +29,6 @@ public class StudentDao {
                 s.getMajor());
         jdbcTemplate.execute(strSql);
 
-        strSql="select *from student ORDER BY sid DESC LIMIT 1;";
         RowMapper<Student> rm = new BeanPropertyRowMapper<Student>(Student.class);
             Student student = jdbcTemplate.queryForObject(strSql,rm);
             s.setSid(student.getSid());

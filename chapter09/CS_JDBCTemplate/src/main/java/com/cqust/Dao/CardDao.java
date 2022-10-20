@@ -15,7 +15,7 @@ public class CardDao {
     private JdbcTemplate jdbcTemplate;
 
     public int insert(Card card){
-        String strSql="insert into card(sid,sno,name,cno,money,lastAccessTime)VALUE(?,?,?,?,?,?)";
+        String strSql="select *from card ORDER BY cid DESC LIMIT 1";
         Object[] obj = new Object[]{
                 card.getSid(),
                 card.getSno(),
@@ -25,6 +25,10 @@ public class CardDao {
                 card.getLastAccessTime()
         };
 
+
+        RowMapper<Card> rm = new BeanPropertyRowMapper<>(Card.class);
+        card = jdbcTemplate.queryForObject(strSql,rm);
+        card.setCid(card.getCid());
 
         int num=this.jdbcTemplate.update(strSql, obj);
         return num;
