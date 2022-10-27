@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="book" class="com.cqust.entity.Book"></bean>
+
+    <bean id="student" class="com.cqust.entity.Student">
+        <constructor-arg type="int" value="50"/>
+        <constructor-arg type="java.lang.String" value="YXT"/>
+        <constructor-arg name="book" ref="book"/>
+        <!-- collaborators and configuration for this bean go here -->
+    </bean>
+
+    <bean id="student_setter" class="com.cqust.entity.Student_Setter">
+        <property name="book" ref="book"/>
+        <property name="name" value="hyj"/>
+        <property name="age" value="20"/>
+    </bean>
+
+</beans>
