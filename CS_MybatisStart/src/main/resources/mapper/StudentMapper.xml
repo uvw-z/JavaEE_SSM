@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqust.Entity.Student">
+    <select id="selectById" resultType="com.cqust.Entity.Student" parameterType="int">
+        select * from student where sid=#{sid}
+    </select>
+
+    <select id="selectAll" resultType="com.cqust.Entity.Student">
+        select * from student
+    </select>
+
+    <insert id="insert" parameterType="com.cqust.Entity.Student">
+        insert into student VALUES (#{sid},#{sno},#{name},#{age},#{major})
+    </insert>
+
+    <delete id="delete">
+        delete from student where sid = #{sid}
+    </delete>
+
+    <update id="update">
+         update student set  sno = #{sno},name = #{name},age = #{age},major = #{major}  where sid = #{sid}
+    </update>
+
+</mapper>
