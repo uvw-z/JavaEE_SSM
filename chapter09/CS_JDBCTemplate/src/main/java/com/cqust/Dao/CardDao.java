@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
+/*this is a changed test*/
 import java.util.List;
 
 @Repository
@@ -15,7 +15,7 @@ public class CardDao {
     private JdbcTemplate jdbcTemplate;
 
     public int insert(Card card){
-        String strSql="select *from card ORDER BY cid DESC LIMIT 1";
+        String strSql="insert into card(sid,sno,name,cno,money,lastAccessTime)VALUE(?,?,?,?,?,?)";
         Object[] obj = new Object[]{
                 card.getSid(),
                 card.getSno(),
@@ -25,10 +25,6 @@ public class CardDao {
                 card.getLastAccessTime()
         };
 
-
-        RowMapper<Card> rm = new BeanPropertyRowMapper<>(Card.class);
-        card = jdbcTemplate.queryForObject(strSql,rm);
-        card.setCid(card.getCid());
 
         int num=this.jdbcTemplate.update(strSql, obj);
         return num;

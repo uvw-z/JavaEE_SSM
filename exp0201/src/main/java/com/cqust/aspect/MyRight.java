@@ -3,10 +3,13 @@ package com.cqust.aspect;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 
 
 @Aspect
 public class MyRight {
+
     public void beforecheck(JoinPoint joinPoint) {
         System.out.println(joinPoint.toString());
         System.out.print("目标方法参数："+joinPoint.getArgs());

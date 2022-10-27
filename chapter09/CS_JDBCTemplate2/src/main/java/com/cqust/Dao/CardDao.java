@@ -11,6 +11,7 @@ public class CardDao {
         System.out.println("insert:"+card);
         return 1;
     }
+    /**/
     public int deleteById(int id) {
         System.out.println("delete:"+ id);
         return 1;
