@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        https://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--注解，数据库的装配-->
+    <context:component-scan base-package="com.cqust"></context:component-scan>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/jdbc_template?characterEncoding=UTF-8&amp;
+                  allowPublicKeyRetrieval=true&amp;
+                  useSSL=false&amp;serverTimezone=Asia/Shanghai"/>
+    </bean>
+    <!--定义jdbcTemplate-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+
+    <!--1.事务管理器，依赖于数据源-->
+    <!-- similarly, don't forget the TransactionManager -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--2.编写通知，对事物进行增强（通知），需要编写切入点和具体执行事务的细节-->
+    <!-- the transactional advice (what 'happens'; see the <aop:advisor/> bean below) -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED"
+             isolation="DEFAULT" read-only="false"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--3.编写aop，让Spring自动为目标生成代理，需要使用AspectJ的表达式-->
+    <!-- ensure that the above transactional advice runs for any execution
+         of an operation defined by the FooService interface -->
+    <aop:config>
+        <aop:pointcut id="fooServiceOperation" expression="execution(* com.cqust.Biz.CardBiz.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceOperation"/>
+    </aop:config>
+
+
+    <!--注解的方式：注册事务管理器驱动-->
+    <tx:annotation-driven transaction-manager="txManager"/>
+
+</beans>
