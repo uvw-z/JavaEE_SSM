@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StudentM">
+
+    <!--Dynamic SQL-->
+    <!-- <if>元素使用 -->
+    <select id="findByNameAndMajor" parameterType="Student" resultType="Student">
+        select * from student
+        <!--where 1=1 -->
+        <!-- <where> -->
+        <trim prefix="where" prefixOverrides="and">
+            <if test="name !=null and name !=''">
+                and name like concat('%',#{name}, '%')
+            </if>
+            <if test="major !=null and major !=''">
+                and major= #{major}
+            </if>
+        </trim>
+        <!--</where> -->
+    </select>
+
+  <!--  <choose>(<when>、<otherwise>)元素使用 -->
+    <select id="findByNameOrMajor" parameterType="Student" resultType="Student">
+        select * from student where 1=1
+        <choose>
+            <!--条件判断 -->
+            <when test="name !=null and name !=''">
+                and name like concat('%',#{name}, '%')
+            </when>
+            <when test="major !=null and major !=''">
+                and major= #{major}
+            </when>
+            <otherwise>
+                and sno is not null
+            </otherwise>
+        </choose>
+    </select>
+    <!-- <set>元素 -->
+    <update id="updateBySet"  parameterType="Student">
+        update student
+        <set>
+            <if test="name !=null and name !=''">
+                name=#{name},
+            </if>
+            <if test="major !=null and major !=''">
+                major=#{major},
+            </if>
+            <if test="sno !=null and sno !=''">
+                sno=#{sno},
+            </if>
+        </set>
+        where sid=#{sid}
+    </update>
+    <!-- <trim>元素 --> <!--实现更新操作-->
+    <update id="updateByTrim" parameterType="Student">
+        update student
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name !=null and name !=''">
+                name=#{name},
+            </if>
+            <if test="major !=null and major !=''">
+                major=#{major},
+            </if>
+            <if test="sno !=null and sno !=''">
+                sno=#{sno},
+            </if>
+        </trim>
+        where sid=#{sid}
+    </update>
+
+    <!--foreach迭代数组-->
+    <select id="findByArray" resultType="Student">
+        SELECT *FROM student WHERE sid IN
+        <foreach item="sid" index="index" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </select>
+
+    <!--foreach迭代List-->
+    <select id="findByList" resultType="Student">
+        SELECT *FROM student WHERE sid IN
+        <foreach item="sid" index="index" collection="list" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </select>
+
+    <!--foreach迭代Map-->
+    <select id="findByMap" parameterType="java.util.Map" resultType="Student">
+        SELECT *FROM student WHERE major=#{major} AND sid IN
+        <foreach item="roleMap" collection="sid" index="index" open="(" separator="," close=")">
+            #{roleMap}
+        </foreach>
+    </select>
+
+
+
+
+    <!--使用<sql>元素-->
+    <sql id="studentColumn">sid,sno,name </sql>
+    <select id="selectById_sql" resultType="Student" parameterType="int">
+        select
+            <include refid="studentColumn"></include>
+        from student where sid=#{sid}
+    </select>
+
+    <!--CRUD操作-->
+    <select id="selectById" resultType="Student" parameterType="int" >
+        select * from student where sid=#{sid}
+    </select>
+
+    <select id="selectAll" resultType="Student">
+        select * from student
+    </select>
+
+    <insert id="insert" parameterType="Student"  keyProperty="sid" useGeneratedKeys="true"  >
+        insert into student VALUES (#{sid},#{sno},#{name},#{age},#{major})
+    </insert>
+
+    <delete id="delete">
+        delete from student where sid = #{sid}
+    </delete>
+
+    <update id="update">
+         update student set  sno = #{sno},name = #{name},age = #{age},major = #{major}  where sid = #{sid}
+    </update>
+
+
+</mapper>
