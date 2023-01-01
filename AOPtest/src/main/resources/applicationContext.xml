@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.cqust.Service"/>
+
+<!--    &lt;!&ndash;注册bean&ndash;&gt;
+    <bean name="userDao2" class="com.cqust.S"/>
+    <bean name="AnnoAdvice" class="task1.demo02.AnnoAdvice"/>  &lt;!&ndash;增强方法所在的类&ndash;&gt;
+    &lt;!&ndash;开启@AspectJ的自动代理支持&ndash;&gt;
+    <aop:aspectj-autoproxy/>-->
+
+
+</beans>

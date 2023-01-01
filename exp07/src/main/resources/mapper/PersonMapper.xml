@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqust.mapper.PersonMapper">
+
+    <select id="findPersonById" parameterType="int" resultMap="IdCardWithPersonResult">
+        select * from tb_person where id=#{id}
+    </select>
+
+    <resultMap id="IdCardWithPersonResult" type="Person">
+        <association property="card" column="card_id" javaType="IdCard"  select="com.cqust.mapper.IdCard.findCodeById"/>
+    </resultMap>
+</mapper>

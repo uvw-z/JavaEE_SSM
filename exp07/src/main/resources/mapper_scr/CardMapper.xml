@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CardMapper">
+    <!--关联映射-->
+        <!--1对1-->
+    <select id="selectBySid" resultType="Card" parameterType="int">
+        select * from card where sid=#{sid}
+    </select>
+
+        <!--1对多-->
+    <select id="selectCardWithRecords" resultMap="CardWithRecords" parameterType="int">
+        select *from card where cid=#{cid}
+    </select>
+        <resultMap id="CardWithRecords" type="Card">
+            <!--数据库字段与Entity字段相同-->
+            <collection property="recordList" ofType="Record" column="cid"  select="RecordMapper.selectByCid"></collection>
+        </resultMap>
+
+    <!--CRUD操作-->
+    <select id="selectById" resultType="Card" parameterType="int">
+        select * from card where cid=#{cid}
+    </select>
+
+    <select id="selectAll" resultType="Card">
+        select * from Card
+    </select>
+
+    <insert id="insert" parameterType="Card" keyColumn="cid" useGeneratedKeys="true">
+        insert into card VALUES (#{cid},#{sid},#{sno},#{name},#{cno},#{money},NOW())
+    </insert>
+
+    <delete id="delete">
+        delete from card where cid = #{cid}
+    </delete>
+
+    <update id="update">
+         update card set  sid=#{sid},sno=#{sno},name=#{name},cno=#{cno},money=#{money},lastAccessTime=#{lastAccessTime} where cid =#{cid}
+    </update>
+
+</mapper>

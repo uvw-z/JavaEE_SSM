@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqust.mapper.UserMapper">
+
+    <!--1对多-->
+    <select id="findUserWithOrders" resultMap="UserWithOrders" parameterType="int">
+        select *from tb_user where id=#{id}
+    </select>
+    <resultMap id="UserWithOrders" type="com.cqust.Pojo.Users">
+        <!--数据库字段与Pojo实体类字段相同--> <!--select语句返回的是int，int这个值是orders里面的user_id,这里传入User的id-->
+        <collection property="ordersList" ofType="com.cqust.Pojo.Orders" column="id"
+                    select="com.cqust.mapper.OrdersMapper.selectByUid"></collection>
+    </resultMap>
+
+
+</mapper>

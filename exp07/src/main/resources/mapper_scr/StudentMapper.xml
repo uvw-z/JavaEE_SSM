@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StudentMapper">
+    <!--关联映射-->
+    <!--1对1-->
+    <select id="selectStudentWithCard" resultMap="studentWithCard" parameterType="int">
+        select * from student where sid = #{sid}
+    </select>
+        <resultMap id="studentWithCard" type="Student" >
+            <id property="sid" column="sid"/> <!--主键用id,其他用result-->
+            <result property="name" column="name"/>
+            <association property="card" javaType="Card" column="sid" select="CardMapper.selectBySid"/>
+        </resultMap>
+
+    <!--Student的CRUD操作-->
+    <select id="selectById" resultType="Student" parameterType="int" >
+        select * from student where sid=#{sid}
+    </select>
+    <select id="selectAll" resultType="Student">
+        select * from student
+    </select>
+
+    <insert id="insert" parameterType="Student"  keyProperty="sid" useGeneratedKeys="true"  >
+        insert into student VALUES (#{sid},#{sno},#{name},#{age},#{major})
+    </insert>
+
+    <delete id="delete">
+        delete from student where sid = #{sid}
+    </delete>
+
+    <update id="update">
+         update student set  sno = #{sno},name = #{name},age = #{age},major = #{major}  where sid = #{sid}
+    </update>
+
+
+</mapper>

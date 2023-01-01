@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DoctorMapper">
+    <!--关联映射-->
+    <!--1对1-->
+    <select id="selectDoctorWithDepartment" resultMap="DoctorWithDepartment" parameterType="int">
+        select * from doctor where DoctorId = #{DoctorId}
+    </select>
+    <resultMap id="DoctorWithDepartment" type="com.cqust.Entity.Doctor" >
+        <id property="DoctorId" column="DoctorId"/> <!--主键用id,其他用result-->
+        <!--<result property="name" column="name"/>-->
+        <association property="department" javaType="Card" column="sid" select="CardMapper.selectBySid"/>
+    </resultMap>
+
+
+</mapper>
